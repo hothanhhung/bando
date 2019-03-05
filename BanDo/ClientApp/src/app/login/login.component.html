@@ -1,0 +1,16 @@
+
+<div>
+  <div class="form-group">
+    <label for="usr">Username:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="username">
+  </div>
+  <div class="form-group">
+    <label for="usr">Pasword:</label>
+    <input type="text" class="form-control" id="phone" [(ngModel)]="password">
+  </div>
+  <div>
+    {{message}}
+  </div>
+  message
+  <button type="button" class="btn btn-success" (click)='login()'>Đăng Nhập</button>
+</div>

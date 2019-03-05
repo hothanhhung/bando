@@ -1,0 +1,34 @@
+<h1>Danh Sách Khách Hàng</h1>
+
+<p>
+  <a (click)='moveToList()'>
+    <span class='glyphicon glyphicon-education'></span> Danh Sách Khách Hàng
+  </a>
+</p>
+
+<p *ngIf="!customer"><em>Loading...</em></p>
+
+<div *ngIf="customer">
+  <div>{{ customer.id }}</div>
+  <div>{{ customer.name }}</div>
+  <div>{{ customer.phone }}</div>
+  <div>{{ customer.address }}</div>
+  <div>{{ customer.email }}</div>
+  <div class="form-group">
+    <label for="usr">Name:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="customer.name">
+  </div>
+  <div class="form-group">
+    <label for="usr">Phone:</label>
+    <input type="text" class="form-control" id="phone" [(ngModel)]="customer.phone">
+  </div>
+  <div class="form-group">
+    <label for="usr">Address:</label>
+    <input type="text" class="form-control" id="address" [(ngModel)]="customer.address">
+  </div>
+  <div class="form-group">
+    <label for="usr">Email:</label>
+    <input type="text" class="form-control" id="email" [(ngModel)]="customer.email">
+  </div>
+  <button type="button" class="btn btn-success" (click)='save()'>Success</button>
+</div>

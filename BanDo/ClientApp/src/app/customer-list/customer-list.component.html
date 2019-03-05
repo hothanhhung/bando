@@ -1,0 +1,37 @@
+<h1>Danh Sách Khách Hàng</h1>
+
+<p>
+  <a (click)="addNew()">
+    <span class='glyphicon glyphicon-education'></span> Thêm mới
+  </a>
+</p>
+
+<p *ngIf="!customers"><em>Loading...</em></p>
+
+<table class='table' *ngIf="customers">
+  <thead>
+    <tr>
+      <th>Họ và Tên</th>
+      <th>Số Điện Thoại</th>
+      <th>Địa Chỉ</th>
+      <th>Email</th>
+      <th>Ngày Cập Nhật</th>
+      <th>Ngày Thêm</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of customers">
+      <td>{{ customer.name }}</td>
+      <td>{{ customer.phone }}</td>
+      <td>{{ customer.address }}</td>
+      <td>{{ customer.email }}</td>
+      <td>{{ customer.updatedDate }}</td>
+      <td>{{ customer.addedDate }}</td>
+      <td>
+        <a (click)="openDetail(customer.id)">Chỉnh Sửa</a>
+        <a (click)="delete(customer)">Xóa</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
