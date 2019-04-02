@@ -1,0 +1,30 @@
+<div id="map" style="height:500px; width:80%; float: left"></div>
+<div style="float: right; width:18%;">
+  <div *ngIf="!selectedDrawPie">Tạo hoặc chọn khu vực</div>
+  <div *ngIf="selectedDrawPie">
+    <div>Name: {{selectedDrawPie.id}}</div>
+    <div style="width: 100%;overflow: auto;">Các Tọa Độ:{{ selectedDrawPie.bounds }}</div>
+    <div>
+      <div class="form-group">
+        <label>Đánh dấu với lô:</label>
+        <select class="form-control" id="direction" [(ngModel)]="selectedDrawPie.slotId" (change)="findSlot(selectedDrawPie.slotId)">
+          <option value=""></option>
+          <option *ngFor="let slot of slots" value="{{slot.id}}">{{slot.name}}</option>
+        </select>
+      </div>
+      <div *ngIf="selectedSlot">
+        <div>Tên: {{selectedSlot.name}}</div>
+        <div>Hướng: {{ selectedSlot.direction }}</div>
+        <div>Dài: {{ selectedSlot.longInMeter }} m</div>
+        <div>Rộng: {{ selectedSlot.widthInMeter }} m</div>
+        <div>Diện Tích: {{ selectedSlot.widthInMeter * selectedSlot.longInMeter }} m2</div>
+        <div>Đường: {{ selectedSlot.widthOfStreetInMeter }} m</div>
+      </div>
+    </div>
+    <div>
+      <button type="button" class="btn btn-success" (click)='save()'>Lưu</button>
+      <button *ngIf="selectedDrawPie.id>0" type="button" class="btn btn-danger" (click)='delete()'>Xóa</button>
+      <button *ngIf="selectedDrawPie.id==0" type="button" class="btn btn-danger" (click)='cancel()'>Bỏ Qua</button>
+    </div>
+  </div>
+</div>

@@ -11,5 +11,7 @@ namespace BanDo.Data
 
         public DbSet<Customer> Customers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<DrawPie> DrawPies { get; set; }
+        public DbSet<Slot> Slots { get; set; }
     }
 }

@@ -25,7 +25,14 @@ export class LoginComponent{
       if (result == null) {
         this.message = 'usename or password invalid!!!';
       } else {
-        this.router.navigate(['./customer']);
+        if (typeof (Storage) !== "undefined") {
+          // Code for localStorage/sessionStorage.
+          window.sessionStorage.setItem("currentUser", JSON.stringify(result));
+          this.router.navigate(['./customer']);
+        } else {
+          // Sorry! No Web Storage support..
+          alert('Sorry! No Web Storage support...');
+        }
       }
     }, error => {
       console.error(error);
@@ -35,7 +42,7 @@ export class LoginComponent{
 }
 
 interface Customer {
-  id: number;
+  username: string;
   name: string;
   address: string;
   phone: string;

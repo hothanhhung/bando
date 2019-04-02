@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
@@ -59,20 +60,25 @@ namespace BanDo
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    template: "{controller=home}/{action=Index}/{id?}");
             });
-
-            app.UseSpa(spa =>
+            app.Map(new PathString("/manager"), appMember =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
-                spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
+                appMember.UseStaticFiles();
+                appMember.UseSpaStaticFiles();
+                appMember.UseAuthentication();
+                appMember.UseSpa(spa =>
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
+                    // To learn more about options for serving an Angular SPA from ASP.NET Core,
+                    // see https://go.microsoft.com/fwlink/?linkid=864501
+
+                    spa.Options.SourcePath = "ClientApp";
+
+                    if (env.IsDevelopment())
+                    {
+                        spa.UseAngularCliServer(npmScript: "start");
+                    }
+                });
             });
         }
     }

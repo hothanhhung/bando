@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation" *ngIf="currentUser">
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
@@ -12,7 +12,7 @@
   <!-- Top Menu Items -->
   <ul class="nav navbar-right top-nav">
     <li class="dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> John Smith <b class="caret"></b></a>
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> currentUser.Name <b class="caret"></b></a>
       <ul class="dropdown-menu">
         <li>
           <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
@@ -44,8 +44,13 @@
         </a>
       </li>
       <li [routerLinkActive]='["active"]'>
-        <a [routerLink]='["/counter"]' (click)='collapse()'>
-          <span class='glyphicon glyphicon-education'></span> Counter
+        <a [routerLink]='["/map"]' (click)='collapse()'>
+          <span class='glyphicon glyphicon-education'></span> Bản Đồ Phân Lô
+        </a>
+      </li>
+      <li [routerLinkActive]='["active"]'>
+        <a [routerLink]='["/slot"]' (click)='collapse()'>
+          <span class='glyphicon glyphicon-education'></span> Danh Sách Các Lô
         </a>
       </li>
       <li [routerLinkActive]='["active"]'>

@@ -1,0 +1,45 @@
+<h1>Danh Sách Khách Hàng</h1>
+
+<p>
+  <a (click)="addNew()">
+    <span class='glyphicon glyphicon-education'></span> Thêm mới
+  </a>
+</p>
+
+<p *ngIf="!slots"><em>Loading...</em></p>
+
+<table class='table' *ngIf="slots">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Tên</th>
+      <th>Hướng</th>
+      <th>Dài (m)</th>
+      <th>Rộng (m)</th>
+      <th>Diên Tích (m2)</th>
+      <th>Đường (m)</th>
+      <th>Đã Đánh Dấu</th>
+      <th>Ngày Tạo</th>
+      <th>Ngày Cập Nhật</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let slot of slots">
+      <td>{{ slot.id }}</td>
+      <td>{{ slot.name }}</td>
+      <td>{{ slot.direction }}</td>
+      <td>{{ slot.longInMeter }}</td>
+      <td>{{ slot.widthInMeter }}</td>
+      <td>{{ slot.widthInMeter * slot.longInMeter }}</td>
+      <td>{{ slot.widthOfStreetInMeter }}</td>
+      <td> </td>
+      <td>{{ slot.updatedDate }}</td>
+      <td>{{ slot.addedDate }}</td>
+      <td>
+        <a (click)="openDetail(slot.id)">Chỉnh Sửa</a>
+        <a (click)="delete(slot)">Xóa</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

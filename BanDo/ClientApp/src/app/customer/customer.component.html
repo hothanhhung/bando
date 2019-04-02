@@ -6,7 +6,7 @@
   </a>
 </p>
 
-<p *ngIf="!customer"><em>Loading...</em></p>
+<p *ngIf="!customer"><em>Đang Tải...</em></p>
 
 <div *ngIf="customer">
   <div>{{ customer.id }}</div>
@@ -15,20 +15,20 @@
   <div>{{ customer.address }}</div>
   <div>{{ customer.email }}</div>
   <div class="form-group">
-    <label for="usr">Name:</label>
+    <label for="usr">Họ Tên:</label>
     <input type="text" class="form-control" id="name" [(ngModel)]="customer.name">
   </div>
   <div class="form-group">
-    <label for="usr">Phone:</label>
+    <label for="usr">Số Điện Thoại:</label>
     <input type="text" class="form-control" id="phone" [(ngModel)]="customer.phone">
   </div>
   <div class="form-group">
-    <label for="usr">Address:</label>
+    <label for="usr">Địa Chỉ:</label>
     <input type="text" class="form-control" id="address" [(ngModel)]="customer.address">
   </div>
   <div class="form-group">
     <label for="usr">Email:</label>
     <input type="text" class="form-control" id="email" [(ngModel)]="customer.email">
   </div>
-  <button type="button" class="btn btn-success" (click)='save()'>Success</button>
+  <button type="button" class="btn btn-success" (click)='save()'>Lưu</button>
 </div>

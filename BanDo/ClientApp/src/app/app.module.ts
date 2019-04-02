@@ -12,6 +12,9 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerComponent } from './customer/customer.component';
 import { LoginComponent } from './login/login.component';
+import { MapComponent } from './map/map.component';
+import { SlotListComponent } from './slot-list/slot-list.component';
+import { SlotComponent } from './slot/slot.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +25,10 @@ import { LoginComponent } from './login/login.component';
     FetchDataComponent,
     CustomerListComponent,
     CustomerComponent,
-    LoginComponent
+    LoginComponent,
+    MapComponent,
+    SlotListComponent,
+    SlotComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -35,6 +41,9 @@ import { LoginComponent } from './login/login.component';
       { path: 'customer/:id', component: CustomerComponent },
       { path: 'customer', component: CustomerListComponent },
       { path: 'login', component: LoginComponent },
+      { path: 'map', component: MapComponent },
+      { path: 'slot/:id', component: SlotComponent },
+      { path: 'slot', component: SlotListComponent },
     ])
   ],
   providers: [],

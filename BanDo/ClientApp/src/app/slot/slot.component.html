@@ -1,0 +1,41 @@
+<h1>Danh Sách Khách Hàng</h1>
+
+<p>
+  <a (click)='moveToList()'>
+    <span class='glyphicon glyphicon-education'></span> Danh Sách Các Lô
+  </a>
+</p>
+
+<p *ngIf="!slot"><em>Đang tải...</em></p>
+<div *ngIf="slot">
+  <div class="form-group">
+    <label for="usr">Tên:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="slot.name">
+  </div>
+  <div class="form-group">
+    <label for="usr">Hướng:</label>
+    <select class="form-control" id="direction" [(ngModel)]="slot.direction">
+      <option value="Bắc">Bắc</option>
+      <option value="Đông Bắc">Đông Bắc</option>
+      <option value="Đông">Đông</option>
+      <option value="Đông Nam">Đông Nam</option>
+      <option value="Nam">Nam</option>
+      <option value="Tây Nam">Tây Nam</option>
+      <option value="Tây">Tây</option>
+      <option value="Tây Bắc">Tây Bắc</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="usr">Chiều Dài (m):</label>
+    <input type="text" class="form-control" id="longInMeter" [(ngModel)]="slot.longInMeter">
+  </div>
+  <div class="form-group">
+    <label for="usr">Chiều Rộng:</label>
+    <input type="text" class="form-control" id="widthInMeter" [(ngModel)]="slot.widthInMeter">
+  </div>
+  <div class="form-group">
+    <label for="usr">Đường:</label>
+    <input type="text" class="form-control" id="WidthOfStreetInMeter" [(ngModel)]="slot.WidthOfStreetInMeter">
+  </div>
+  <button type="button" class="btn btn-success" (click)='save()'>Lưu</button>
+</div>
