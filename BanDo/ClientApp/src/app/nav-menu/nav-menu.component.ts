@@ -15,7 +15,7 @@ export class NavMenuComponent {
   currentUser;
   constructor(http: HttpClient, private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
-    this.baseUrl = baseUrl;
+    this.baseUrl = '/';
     var str = window.sessionStorage.getItem("currentUser");
     if (str) {
       this.currentUser = JSON.parse(str);

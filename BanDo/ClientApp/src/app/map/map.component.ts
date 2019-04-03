@@ -38,7 +38,7 @@ export class MapComponent implements OnInit {
   constructor(private ngZone: NgZone, http: HttpClient, private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string)
   {
     this.httpClient = http;
-    this.baseUrl = baseUrl;
+    this.baseUrl = '/';
 
     this.httpClient.get<DrawPie[]>(baseUrl + 'api/DrawPie/GetAll').subscribe(result => {
       this.drawPies = result;

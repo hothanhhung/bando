@@ -13,7 +13,7 @@ export class SlotListComponent {
 
   constructor(http: HttpClient, private router: Router, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
-    this.baseUrl = baseUrl;
+    this.baseUrl = '/';
 
     this.getAll();
   }

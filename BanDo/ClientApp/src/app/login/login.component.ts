@@ -16,8 +16,14 @@ export class LoginComponent{
 
   constructor(http: HttpClient, private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
-    this.baseUrl = baseUrl;
+    this.baseUrl = '/';
     this.message = '';
+  }
+
+  keyDownFunction(event) {
+    if (event.keyCode == 13) {
+      this.login();
+    }
   }
 
   login() {

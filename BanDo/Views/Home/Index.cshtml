@@ -9,8 +9,36 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+    <script>
+        function initalMap() {
+            var defaultPolygonOptions = {
+                strokeColor: '#FF0000',
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35
+            }
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 16.0225247, lng: 108.2436832 },
+                zoom: 16
+            });
+            var listShapes = @Html.Raw(ViewBag.Shapes);
+            listShapes.forEach(value => {
+                var bounds = JSON.parse(value.Bounds);
+                var shape = new google.maps.Polygon({
+                    paths: bounds
+                });
+                google.maps.event.addListener(shape, 'click', () => {
+                    alert(value);
+                });
+                shape.setOptions(defaultPolygonOptions);
+                shape.setMap(map);
+            });
+        }
+    </script>
 </head>
 <body>
-    Xin Chào
+    <div id="map" style="height:500px; width:100%;"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=zaSyDhKRc4yqSsUmjgAIONXIU-zmUu_6h3cX8&libraries=drawing&callback=initalMap"></script>
 </body>
 </html>

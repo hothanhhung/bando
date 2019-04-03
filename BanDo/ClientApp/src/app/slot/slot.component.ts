@@ -13,7 +13,7 @@ export class SlotComponent implements OnInit {
 
   constructor(http: HttpClient, private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string) {
     this.httpClient = http;
-    this.baseUrl = baseUrl;
+    this.baseUrl = '/';
 
     var id = this.route.snapshot.params['id'];
     if (id > 0) {
