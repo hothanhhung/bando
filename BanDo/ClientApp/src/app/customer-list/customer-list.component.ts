@@ -22,7 +22,6 @@ export class CustomerListComponent {
     this.http.get<Customer[]>(this.baseUrl + 'api/Customer/GetAll').subscribe(result => {
       this.customers = result;
     }, error => {
-      console.error(error);
       alert('Có lỗi khi kết nối server!!!!!!');
     });
   }
@@ -40,7 +39,6 @@ export class CustomerListComponent {
       this.http.get<Customer[]>(this.baseUrl + 'api/Customer/Delete/?id=' + customer.id).subscribe(result => {
         this.getAll();
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
       });
     }

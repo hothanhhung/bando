@@ -40,14 +40,13 @@ export class MapComponent implements OnInit {
     this.httpClient = http;
     this.baseUrl = '/';
 
-    this.httpClient.get<DrawPie[]>(baseUrl + 'api/DrawPie/GetAll').subscribe(result => {
+    this.httpClient.get<DrawPie[]>(this.baseUrl + 'api/DrawPie/GetAll').subscribe(result => {
       this.drawPies = result;
       this.loadMap();
       this.drawPies.forEach((value) => {
         this.addShapeToMap(value, false);
       }); 
     }, error => {
-      console.error(error);
       alert('Có lỗi khi kết nối server!!!!!!');
       });
 
@@ -120,7 +119,6 @@ export class MapComponent implements OnInit {
     this.httpClient.get<Slot[]>(this.baseUrl + 'api/Slot/GetAll').subscribe(result => {
       this.slots = result;
     }, error => {
-      console.error(error);
       alert('Có lỗi khi kết nối server!!!!!!');
     });
   }
@@ -177,7 +175,6 @@ export class MapComponent implements OnInit {
           .subscribe(data => {
             this.cancel();
           }, error => {
-            console.error(error);
             alert('Có lỗi khi kết nối server!!!!!!');
           });
       }
@@ -196,7 +193,6 @@ export class MapComponent implements OnInit {
             alert('Đã Lưu!!!');
           }
         }, error => {
-          console.error(error);
           alert('Có lỗi khi kết nối server!!!!!!');
         });
     }

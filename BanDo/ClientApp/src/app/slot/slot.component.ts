@@ -17,10 +17,9 @@ export class SlotComponent implements OnInit {
 
     var id = this.route.snapshot.params['id'];
     if (id > 0) {
-      http.get<Slot>(baseUrl + 'api/Customer/Get/?id=' + id).subscribe(result => {
+      http.get<Slot>(this.baseUrl + 'api/Customer/Get/?id=' + id).subscribe(result => {
         this.slot = result;
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
       });
     } else {
@@ -56,7 +55,6 @@ export class SlotComponent implements OnInit {
           alert('Đã Lưu!!!');
         }
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
   });
   }

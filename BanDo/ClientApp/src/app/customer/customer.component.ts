@@ -17,10 +17,9 @@ export class CustomerComponent implements OnInit {
 
     var id = this.route.snapshot.params['id'];
     if (id > 0) {
-      http.get<Customer>(baseUrl + 'api/Customer/Get/?customerId=' + id).subscribe(result => {
+      http.get<Customer>(this.baseUrl + 'api/Customer/Get/?customerId=' + id).subscribe(result => {
         this.customer = result;
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
       });
     } else {
@@ -55,7 +54,6 @@ export class CustomerComponent implements OnInit {
           alert('Đã Lưu!!!');
         }
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
   });
   }

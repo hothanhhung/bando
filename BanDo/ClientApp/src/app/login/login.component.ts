@@ -18,6 +18,10 @@ export class LoginComponent{
     this.http = http;
     this.baseUrl = '/';
     this.message = '';
+    var str = window.sessionStorage.getItem("currentUser");
+    if (str) {
+      this.router.navigate(['./customer']);
+    }
   }
 
   keyDownFunction(event) {
@@ -34,14 +38,14 @@ export class LoginComponent{
         if (typeof (Storage) !== "undefined") {
           // Code for localStorage/sessionStorage.
           window.sessionStorage.setItem("currentUser", JSON.stringify(result));
-          this.router.navigate(['./customer']);
+          window.location.reload();
+         // this.router.navigate(['./customer']);
         } else {
           // Sorry! No Web Storage support..
           alert('Sorry! No Web Storage support...');
         }
       }
     }, error => {
-      console.error(error);
       alert('Có lỗi khi kết nối server!!!!!!');
     });
   }

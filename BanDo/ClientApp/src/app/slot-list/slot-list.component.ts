@@ -22,7 +22,6 @@ export class SlotListComponent {
     this.http.get<Slot[]>(this.baseUrl + 'api/Slot/GetAll').subscribe(result => {
       this.slots = result;
     }, error => {
-      console.error(error);
       alert('Có lỗi khi kết nối server!!!!!!');
     });
   }
@@ -40,7 +39,6 @@ export class SlotListComponent {
       this.http.get<Slot[]>(this.baseUrl + 'api/Slot/Delete/?id=' + customer.id).subscribe(result => {
         this.getAll();
       }, error => {
-        console.error(error);
         alert('Có lỗi khi kết nối server!!!!!!');
       });
     }
