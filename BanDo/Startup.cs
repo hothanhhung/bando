@@ -48,7 +48,7 @@ namespace BanDo
             else
             {
                 app.UseExceptionHandler("/Error");
-                app.UseHsts();
+                //app.UseHsts();
             }
 
             //app.UseHttpsRedirection();
@@ -64,8 +64,8 @@ namespace BanDo
             });
             app.Map(new PathString("/manager"), appMember =>
             {
-                //appMember.UseStaticFiles();
-                //appMember.UseSpaStaticFiles();
+                appMember.UseStaticFiles();
+                appMember.UseSpaStaticFiles();
                 //appMember.UseAuthentication();
                 app.UseSpa(spa =>
                 {

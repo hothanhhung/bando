@@ -22,6 +22,11 @@ export class NavMenuComponent {
     }
   }
 
+  logout() {
+    window.sessionStorage.removeItem("currentUser");
+    this.router.navigate(['./login']);
+  }
+
   collapse() {
     this.isExpanded = false;
   }
