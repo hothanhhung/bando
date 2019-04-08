@@ -10,6 +10,28 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <script>
+        function showPopup(event, data) {
+            var height = $('#popuup_div').height();
+            var width = $('#popuup_div').width();
+            //calculating offset for displaying popup message
+            leftVal = event.va.pageX - (width / 2) + "px";
+            topVal = event.va.pageY - (height + 10) + "px";
+            //show the popup message and hide with fading effect
+            if (data && data.Slot) {
+                $('#lbSlot').text("" + data.Slot.Name);
+                $('#lbArea').text("" + data.Slot.WidthInMeter + "m x " + data.Slot.LongInMeter + "m");
+                $('#lbDirection').text("" + data.Slot.Direction);
+                $('#lbStreet').text("" + data.Slot.WidthOfStreetInMeter + "m");
+            } else {
+                $('#lbSlot').text("");
+                $('#lbArea').text("");
+                $('#lbDirection').text("");
+                $('#lbStreet').text("");
+            }
+            $('#popuup_div').css({ left: leftVal, top: topVal }).show();
+
+        }
+
         function initalMap() {
             var defaultPolygonOptions = {
                 strokeColor: '#FF0000',
@@ -28,17 +50,72 @@
                 var shape = new google.maps.Polygon({
                     paths: bounds
                 });
-                google.maps.event.addListener(shape, 'click', () => {
-                    alert(value);
+                google.maps.event.addListener(shape, 'click', (ev) => {
+                    showPopup(ev, value);
+                    //alert(value);
                 });
                 shape.setOptions(defaultPolygonOptions);
                 shape.setMap(map);
             });
         }
     </script>
+    <style>
+        .popup_msg {
+            position: absolute;
+            z-index: 10;
+            width: 200px;
+            height: 102px;
+            color: #171616;
+            font: 14px Verdana, Arial, Helvetica, sans-serif;
+            display: none;
+            background: wheat;
+            border: aliceblue;
+            border: 2px solid #8d9471;
+            border-radius: 15px;
+        }
+
+        .close_popup_msg {
+            position: absolute;
+            top: -5px;
+            right: -7px;
+            font-weight: 800;
+            color: red;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            background: #ccc;
+            border: 1px solid #000;
+            margin: 0px;
+            padding: 0px;
+            align-items: center;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .popup_msg::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #3e502e transparent transparent transparent;
+        }
+    </style>
 </head>
 <body>
+    <div id="popuup_div" class="popup_msg">
+        <div class="close_popup_msg" onclick="$('#popuup_div').hide();">x</div>
+        <div style="text-align: center;font-weight: 800;border-bottom: 1px solid;" id="lbSlot">Lô B1-22</div>
+        <div style="margin: 5px;">
+            <div style="width:100%; display:inline-table;"><div style="float:left">Dài x Rộng:</div><div style="float:right;font-weight: 800;" id="lbArea">5mx20m</div></div>
+            <div style="width:100%; display:inline-table;"><div style="float:left">Hướng:</div><div style="float:right;font-weight: 800;" id="lbDirection">Nam</div></div>
+            <div style="width:100%; display:inline-table;"><div style="float:left">Đường:</div><div style="float:right;font-weight: 800;" id="lbStreet">10.5m</div></div>
+        </div>
+    </div>
     <div id="map" style="height:500px; width:100%;"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=zaSyDhKRc4yqSsUmjgAIONXIU-zmUu_6h3cX8&libraries=drawing&callback=initalMap"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key==zaSyDhKRc4yqSsUmjgAIONXIU-zmUu_6h3cX8&libraries=drawing&callback=initalMap"></script>
 </body>
 </html>

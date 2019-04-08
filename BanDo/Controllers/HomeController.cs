@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using BanDo.Data;
 using Microsoft.AspNetCore.Mvc;
 
+using Microsoft.EntityFrameworkCore;
+
 namespace BanDo.Controllers
 {
     public class HomeController : Controller
@@ -18,7 +20,7 @@ namespace BanDo.Controllers
 
         public IActionResult Index()
         {
-            ViewBag.Shapes = Newtonsoft.Json.JsonConvert.SerializeObject(_context.DrawPies.ToList());
+            ViewBag.Shapes = Newtonsoft.Json.JsonConvert.SerializeObject(_context.DrawPies.Include(p=>p.Slot).ToList());
             return View();
         }
     }
