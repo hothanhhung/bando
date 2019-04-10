@@ -1,0 +1,208 @@
+﻿@page
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script>
+        function showPopup(event, data) {
+            var height = $('#popuup_div').height();
+            var width = $('#popuup_div').width();
+            //calculating offset for displaying popup message
+            leftVal = '50%';// event.e.pageX - (width / 2) + "px";
+            topVal = '0px';//event.e.pageY - (height + 10) + "px";
+            //show the popup message and hide with fading effect
+            if (data && data.Slot) {
+                $('#lbSlot').text("" + data.Slot.Name);
+                $('#lbArea').text("" + data.Slot.WidthInMeter + "m x " + data.Slot.LongInMeter + "m");
+                $('#lbDirection').text("" + data.Slot.Direction);
+                $('#lbStreet').text("" + data.Slot.WidthOfStreetInMeter + "m");
+            } else {
+                $('#lbSlot').text("");
+                $('#lbArea').text("");
+                $('#lbDirection').text("");
+                $('#lbStreet').text("");
+            }
+            $('#popuup_div').css({ left: leftVal, top: topVal }).show();
+
+        }
+
+        var canvas;
+        var drawing = false;
+        var lastX, lastY;
+        function initalMap() {
+            canvas = window._canvas = new fabric.Canvas('c', {
+                hoverCursor: 'pointer',
+                selection: true,
+                selectionBorderColor: 'green',
+                backgroundColor: null
+            });
+
+            fabric.Image.fromURL('/assets/phanlo.jpg', (img) => {
+                canvas.setWidth(img.width);
+                canvas.setHeight(img.height);
+                canvas.setBackgroundImage(img, canvas.renderAll.bind(canvas), {
+                    scaleX: canvas.width / img.width,
+                    scaleY: canvas.height / img.height
+                });
+                canvas.setZoom(0.5);
+            });
+
+            canvas.on('mouse:down', (e) => {
+                drawing = true;
+                lastX = e.e.clientX;
+                lastY = e.e.clientY;
+            });
+            canvas.on('mouse:up', (e) => {
+                drawing = false;
+            });
+            canvas.on('mouse:move', (e) => {
+                if (drawing) {
+                    $('#map').scrollLeft($('#map').scrollLeft() + (lastX - e.e.clientX));
+                    $('#map').scrollTop($('#map').scrollTop() + (lastY - e.e.clientY));
+                    lastX = e.e.clientX;
+                    lastY = e.e.clientY;
+                   // console.log("" + (lastX - e.e.clientX) + " " + (lastY - e.e.clientY));
+                }
+            });
+
+            var listShapes = @Html.Raw(ViewBag.Shapes);
+            listShapes.forEach(value => {
+                var points = JSON.parse(value.Bounds);
+                var shape = new fabric.Polygon(points, {
+                    stroke: '#333333',
+                    strokeWidth: 0.5,
+                    fill: '#f137375c',
+                    opacity: 1,
+                    hasBorders: false,
+                    hasControls: false,
+                    lockMovementX: true,
+                    lockMovementY: true
+                });
+                shape.on("selected", (event) => {
+                    selectShape(event, value, shape);
+                });
+                canvas.add(shape);
+            });
+        }
+
+        var selectedShape;
+        function selectShape(event, value, shape) {
+            if (selectedShape != null) {
+                selectedShape.set('fill', '#f137375c');
+            }
+            selectedShape = shape;
+            selectedDrawPie = value;
+            selectedShape.set('fill', '#37f1375c');
+            canvas.renderAll();
+            showPopup(event, value);
+        }
+
+        function zoomAction(zoomIn) {
+            var zoom = canvas.getZoom();
+            if (zoomIn) {
+                zoom = zoom * 2;               
+            } else {
+                zoom = zoom / 2;
+            }
+            if (zoom > 20) zoom = 20;
+            if (zoom < 0.01) zoom = 0.01;
+            canvas.setZoom(zoom);
+        }
+    </script>
+    <style>
+        .zoom_place-button {
+            color: #171616;
+            height: 30px;
+            line-height: 30px;
+            background: wheat;
+            border: 2px solid #8d9471;
+            margin: 3px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .zoom_place-button:hover {
+            background: #f9f0df;
+        }
+        .zoom_place {
+            width: 35px;
+            position: absolute;
+            z-index: 10;
+            color: #171616;
+            font: 14px Verdana, Arial, Helvetica, sans-serif;
+            background: wheat;
+            border-radius: 3px;
+        }
+        .popup_msg {
+            position: absolute;
+            z-index: 10;
+            width: 200px;
+            height: 102px;
+            color: #171616;
+            font: 14px Verdana, Arial, Helvetica, sans-serif;
+            display: none;
+            background: wheat;
+            border: aliceblue;
+            border: 2px solid #8d9471;
+            border-radius: 15px;
+        }
+
+        .close_popup_msg {
+            position: absolute;
+            top: -5px;
+            right: -7px;
+            font-weight: 800;
+            color: red;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            background: #ccc;
+            border: 1px solid #000;
+            margin: 0px;
+            padding: 0px;
+            align-items: center;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        .popup_msg::after {
+            /*content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -10px;
+            border-width: 10px;
+            border-style: solid;
+            border-color: #3e502e transparent transparent transparent;*/
+        }
+    </style>
+</head>
+<body onload="initalMap()">
+    <div id="popuup_div" class="popup_msg">
+        <div class="close_popup_msg" onclick="$('#popuup_div').hide();">x</div>
+        <div style="text-align: center;font-weight: 800;border-bottom: 1px solid;" id="lbSlot">Lô B1-22</div>
+        <div style="margin: 5px;">
+            <div style="width:100%; display:inline-table;"><div style="float:left">Dài x Rộng:</div><div style="float:right;font-weight: 800;" id="lbArea">5mx20m</div></div>
+            <div style="width:100%; display:inline-table;"><div style="float:left">Hướng:</div><div style="float:right;font-weight: 800;" id="lbDirection">Nam</div></div>
+            <div style="width:100%; display:inline-table;"><div style="float:left">Đường:</div><div style="float:right;font-weight: 800;" id="lbStreet">10.5m</div></div>
+        </div>
+    </div>
+    <div class="zoom_place">
+        <div class="zoom_place-button" onclick="zoomAction(true)">+</div>
+        <div class="zoom_place-button" onclick="zoomAction(false)">-</div>
+    </div>
+    <div id="map" style="height:500px; width:100%;overflow: hidden;">
+        <canvas id="c"></canvas>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src='https://rawgit.com/kangax/fabric.js/master/dist/fabric.js'></script>
+</body>
+</html>

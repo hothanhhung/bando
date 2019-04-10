@@ -23,5 +23,11 @@ namespace BanDo.Controllers
             ViewBag.Shapes = Newtonsoft.Json.JsonConvert.SerializeObject(_context.DrawPies.Include(p=>p.Slot).ToList());
             return View();
         }
+
+        public IActionResult MapImage()
+        {
+            ViewBag.Shapes = Newtonsoft.Json.JsonConvert.SerializeObject(_context.DrawPieImages.Include(p => p.Slot).ToList());
+            return View();
+        }
     }
 }
