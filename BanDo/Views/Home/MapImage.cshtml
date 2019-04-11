@@ -42,6 +42,7 @@
                 selectionBorderColor: 'green',
                 backgroundColor: null
             });
+            canvas.setCursor('pointer');
 
             fabric.Image.fromURL('/assets/phanlo.jpg', (img) => {
                 canvas.setWidth(img.width);
@@ -54,6 +55,7 @@
             });
 
             canvas.on('mouse:down', (e) => {
+                canvas.setCursor('all-scroll');
                 drawing = true;
                 lastX = e.e.clientX;
                 lastY = e.e.clientY;
@@ -63,11 +65,17 @@
             });
             canvas.on('mouse:move', (e) => {
                 if (drawing) {
-                    $('#map').scrollLeft($('#map').scrollLeft() + (lastX - e.e.clientX));
-                    $('#map').scrollTop($('#map').scrollTop() + (lastY - e.e.clientY));
+                    updateScroll((lastX - e.e.clientX), (lastY - e.e.clientY));
                     lastX = e.e.clientX;
                     lastY = e.e.clientY;
-                   // console.log("" + (lastX - e.e.clientX) + " " + (lastY - e.e.clientY));
+                }
+            });
+            canvas.on('mouse:wheel', function (opt) {
+                var delta = opt.e.deltaY;
+                if (delta > 0) {
+                    zoomAction(false);
+                } else {
+                    zoomAction(true);
                 }
             });
 
@@ -91,6 +99,28 @@
             });
         }
 
+        function updateScroll(offsetX, offsetY) {
+
+            if (!offsetX) offsetX = 0;
+            if (!offsetY) offsetY = 0;
+
+            var pointX = $('#map').scrollLeft() + offsetX;
+            var pointY = $('#map').scrollTop() + offsetY;
+
+            var maxX = canvas.getWidth() * canvas.getZoom() - $('#map').width();
+            var maxY = canvas.getHeight() * canvas.getZoom() - $('#map').height();
+
+            if (pointX < 0 || maxX < 0) pointX = 0;
+            else if (pointX > maxX) pointX = maxX;
+
+            if (pointY < 0 || maxY < 0) pointY = 0;
+            else if (pointY > maxY) pointY = maxY;
+
+            $('#map').scrollLeft(pointX);
+            $('#map').scrollTop(pointY);
+            //console.log("" + pointX + " " + pointY);
+        }
+
         var selectedShape;
         function selectShape(event, value, shape) {
             if (selectedShape != null) {
@@ -106,13 +136,16 @@
         function zoomAction(zoomIn) {
             var zoom = canvas.getZoom();
             if (zoomIn) {
-                zoom = zoom * 2;               
+                if (zoom >= 1) zoom += 1;
+                else zoom += 0.1;
             } else {
-                zoom = zoom / 2;
+                if (zoom > 1) zoom -= 1;
+                else zoom -= 0.1;
             }
             if (zoom > 20) zoom = 20;
             if (zoom < 0.01) zoom = 0.01;
             canvas.setZoom(zoom);
+            updateScroll();
         }
     </script>
     <style>
@@ -183,6 +216,7 @@
             border-style: solid;
             border-color: #3e502e transparent transparent transparent;*/
         }
+
     </style>
 </head>
 <body onload="initalMap()">

@@ -1,0 +1,25 @@
+<h1>Danh Sách Khách Hàng</h1>
+
+<p>
+  <a (click)='moveToList()'>
+    <span class='glyphicon glyphicon-education'></span> Danh Sách Các Dự Án
+  </a>
+</p>
+
+<p *ngIf="!project"><em>Đang Tải...</em></p>
+
+<div *ngIf="project">
+  <div class="form-group">
+    <label for="usr">Tên Dự Án:</label>
+    <input type="text" class="form-control" id="name" [(ngModel)]="project.name">
+  </div>
+  <div class="form-group">
+    <label for="usr">Địa Chỉ:</label>
+    <input type="text" class="form-control" id="address" [(ngModel)]="project.address">
+  </div>
+  <div class="form-group">
+    <label for="usr">Tiến Độ:</label>
+    <input type="text" class="form-control" id="email" [(ngModel)]="project.progress">
+  </div>
+  <button type="button" class="btn btn-success" (click)='save()'>Lưu</button>
+</div>

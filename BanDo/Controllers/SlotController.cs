@@ -32,6 +32,14 @@ namespace BanDo.Controllers
         }
 
         [HttpGet("[action]")]
+        public IEnumerable<Slot> GetAllByProject(int projectId)
+        {
+            var data = _context.Slots.Where(p=>p.ProductId.HasValue && p.ProductId.Value == projectId).ToList();
+            return data;
+
+        }
+
+        [HttpGet("[action]")]
         public Slot Get(int id)
         {
             var data = _context.Slots.Where(p => p.Id == id).FirstOrDefault();

@@ -4,6 +4,13 @@
   <div *ngIf="selectedDrawPie">
     <div>Name: {{selectedDrawPie.id}}</div>
     <div style="width: 100%;overflow: auto;">Các Tọa Độ:{{ selectedDrawPie.bounds }}</div>
+    <div class="form-group">
+      <label>Dự án:</label>
+      <select class="form-control" id="direction" [(ngModel)]="selectedDrawPie.slot.productId" (change)="loadSlot(selectedDrawPie.slot.productId)">
+        <option value=""></option>
+        <option *ngFor="let project of projects" value="{{project.id}}">{{project.name}}</option>
+      </select>
+    </div>
     <div>
       <div class="form-group">
         <label>Đánh dấu với lô:</label>
@@ -12,13 +19,13 @@
           <option *ngFor="let slot of slots" value="{{slot.id}}">{{slot.name}}</option>
         </select>
       </div>
-      <div *ngIf="selectedSlot">
-        <div>Tên: {{selectedSlot.name}}</div>
-        <div>Hướng: {{ selectedSlot.direction }}</div>
-        <div>Dài: {{ selectedSlot.longInMeter }} m</div>
-        <div>Rộng: {{ selectedSlot.widthInMeter }} m</div>
-        <div>Diện Tích: {{ selectedSlot.widthInMeter * selectedSlot.longInMeter }} m2</div>
-        <div>Đường: {{ selectedSlot.widthOfStreetInMeter }} m</div>
+      <div *ngIf="selectedDrawPie.slot">
+        <div>Tên: {{selectedDrawPie.slot.name}}</div>
+        <div>Hướng: {{ selectedDrawPie.slot.direction }}</div>
+        <div>Dài: {{ selectedDrawPie.slot.longInMeter }} m</div>
+        <div>Rộng: {{ selectedDrawPie.slot.widthInMeter }} m</div>
+        <div>Diện Tích: {{ selectedDrawPie.slot.widthInMeter * selectedDrawPie.slot.longInMeter }} m2</div>
+        <div>Đường: {{ selectedDrawPie.slot.widthOfStreetInMeter }} m</div>
       </div>
     </div>
     <div>

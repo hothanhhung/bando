@@ -9,17 +9,18 @@ declare const $: any;
 
 @Component({
   selector: 'app-map-image-component',
-  templateUrl: './map-image.component.html'
+  templateUrl: './map-image.component.html',
+  styleUrls: ['./map-image.component.css']
 })
 export class MapImageComponent implements OnInit {
   public drawPies: DrawPie[];
   public slots: Slot[];
+  public projects: Project[];
   private httpClient: HttpClient;
   private baseUrl: string;
   private selectedDrawPie: DrawPie;
   private canvas: any;
   private selectedShape: any;
-  private selectedSlot: Slot;
 
   private min = 99;
   private max = 999999;
@@ -50,7 +51,7 @@ export class MapImageComponent implements OnInit {
 
   ngOnInit() {
     this.initMapInCompoment();
-    this.loadSlot();
+    this.getAllProjects();
   }
   
   addPoint(options) {
@@ -152,7 +153,7 @@ export class MapImageComponent implements OnInit {
       this.canvas.remove(line);
     });
     this.canvas.remove(this.activeShape).remove(this.activeLine);
-    this.selectedDrawPie = { id: 0, bounds: '', slotId: null, addedDate: new Date(), updatedDate: new Date() };
+    this.selectedDrawPie = { id: 0, slot: new Slot(), bounds: '', slotId: null, addedDate: new Date(), updatedDate: new Date() };
     this.selectedDrawPie.bounds = JSON.stringify(points);
 
     this.addShapeToMap(this.selectedDrawPie, true);
@@ -162,6 +163,27 @@ export class MapImageComponent implements OnInit {
     this.polygonMode = false;
     this.canvas.selection = true;
   }
+
+  updateScroll(offsetX: number, offsetY: number) {
+
+  if (!offsetX) offsetX = 0;
+  if (!offsetY) offsetY = 0;
+
+  var pointX = $('#map').scrollLeft() + offsetX;
+  var pointY = $('#map').scrollTop() + offsetY;
+
+    var maxX = this.canvas.getWidth() * this.canvas.getZoom() - $('#map').width();
+    var maxY = this.canvas.getHeight() * this.canvas.getZoom() - $('#map').height();
+
+  if (pointX < 0 || maxX < 0) pointX = 0;
+  else if (pointX > maxX) pointX = maxX;
+
+  if (pointY < 0 || maxY < 0) pointY = 0;
+  else if (pointY > maxY) pointY = maxY;
+
+  $('#map').scrollLeft(pointX);
+  $('#map').scrollTop(pointY);
+}
 
 
   public initMapInCompoment() {
@@ -199,7 +221,9 @@ export class MapImageComponent implements OnInit {
     if (this.polygonMode) {
       this.addPoint(options);
     } else {
+      this.canvas.setCursor('all-scroll');
       this.drawing = true;
+      this.updateScroll((this.lastX - options.e.clientX), (this.lastY - options.e.clientY));
       this.lastX = options.e.clientX;
       this.lastY = options.e.clientY;
     }
@@ -209,8 +233,12 @@ export class MapImageComponent implements OnInit {
         this.drawing = false;
       }
   });
-  this.canvas.on('mouse:move', (options) => {
+    this.canvas.on('mouse:move', (options) => {
+      if (this.polygonMode) {
+        this.canvas.setCursor('crosshair');
+      }
     if (this.activeLine && this.activeLine.class == "line") {
+      
       var pointer = this.canvas.getPointer(options.e);
       this.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
@@ -232,37 +260,59 @@ export class MapImageComponent implements OnInit {
       this.lastY = options.e.clientY;
     }
   });
-    /*
-    canvas.on('mouse:wheel', function(opt) {
+    this.canvas.on('mouse:wheel', (opt) => {
       var delta = opt.e.deltaY;
-      var zoom = canvas.getZoom();
-      zoom = zoom + delta/200;
-      if (zoom > 20) zoom = 20;
-      if (zoom < 0.01) zoom = 0.01;
-      canvas.setZoom(zoom);
-      opt.e.preventDefault();
-      opt.e.stopPropagation();
-    });*/
+      if (delta > 0) {
+        this.zoomAction(false);
+      } else {
+        this.zoomAction(true);
+      }
+    });
+  }
+
+ public zoomAction(zoomIn: boolean) {
+    var zoom = this.canvas.getZoom();
+    if (zoomIn) {
+      if (zoom >= 1) zoom += 1;
+      else zoom += 0.1;
+    } else {
+      if (zoom > 1) zoom -= 1;
+      else zoom -= 0.1;
+    }
+    if (zoom > 20) zoom = 20;
+    if (zoom < 0.01) zoom = 0.01;
+    this.canvas.setZoom(zoom);
+    this.updateScroll(0, 0);
+  }
+  getAllProjects() {
+    this.httpClient.get<Project[]>(this.baseUrl + 'api/Project/GetAll').subscribe(result => {
+      this.projects = result;
+    }, error => {
+      alert('Có lỗi khi kết nối server!!!!!!');
+    });
   }
 
   private findSlot(slotId: number) {
-    if (slotId != null && slotId!=0) {
+    if (this.slots && slotId != null && slotId != 0) {
       for (let slot of this.slots) {
         if (slot.id == slotId) {
-          this.selectedSlot = slot;
+          this.selectedDrawPie.slot = slot;
           return;
         }
       }
     }
-    this.selectedSlot = null;
+  //  this.selectedDrawPie.slot = new Slot();
   }
 
-  private loadSlot() {
-    this.httpClient.get<Slot[]>(this.baseUrl + 'api/Slot/GetAll').subscribe(result => {
-      this.slots = result;
-    }, error => {
-      alert('Có lỗi khi kết nối server!!!!!!');
-    });
+  public loadSlot(projectId: number) {
+    if (projectId) {
+      this.httpClient.get<Slot[]>(this.baseUrl + 'api/Slot/GetAllByProject/?projectId=' + projectId).subscribe(result => {
+        this.slots = result;
+          this.findSlot(this.selectedDrawPie.slotId);
+      }, error => {
+        alert('Có lỗi khi kết nối server!!!!!!');
+      });
+    }
   }
 
   loadMap() {
@@ -308,7 +358,14 @@ export class MapImageComponent implements OnInit {
     this.selectedDrawPie = value;
     this.selectedShape.set('fill','#37f1375c');
     this.canvas.renderAll();
-    this.findSlot(this.selectedDrawPie.slotId);
+
+    if (this.selectedDrawPie) {
+      if (this.selectedDrawPie.slot) {
+        this.loadSlot(this.selectedDrawPie.slot.productId);
+      } else {
+        this.selectedDrawPie.slot = new Slot();
+      }
+    }
   }
 
   public create() {
@@ -341,13 +398,14 @@ export class MapImageComponent implements OnInit {
   }
 
   public save() {
-    if (this.selectedDrawPie != null && this.selectedDrawPie.bounds!='') {
+    if (this.selectedDrawPie != null && this.selectedDrawPie.bounds != '') {
       this.httpClient.post<DrawPie>(this.baseUrl + 'api/DrawPieImage/save', this.selectedDrawPie)
         .subscribe(data => {
           if (data == null) {
             alert('Có lỗi khi lưu dữ liệu!!!!!!');
           } else {
             this.selectedDrawPie = data;
+            this.findSlot(this.selectedDrawPie.slotId);
             this.addShapeToMap(this.selectedDrawPie, true);
             alert('Đã Lưu!!!');
           }
@@ -362,17 +420,28 @@ interface DrawPie {
   id: number;
   bounds: string;
   slotId: number;
+  slot: Slot;
   addedDate: Date;
   updatedDate: Date;
 }
 
-interface Slot {
+
+class Slot {
   id: number;
+  productId: number;
   name: string;
   direction: string;
   longInMeter: number;
   widthInMeter: number;
   WidthOfStreetInMeter: number;
+  addedDate: Date;
+  updatedDate: Date;
+}
+interface Project {
+  id: number;
+  name: string;
+  address: string;
+  progress: string;
   addedDate: Date;
   updatedDate: Date;
 }

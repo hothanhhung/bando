@@ -1,0 +1,26 @@
+.zoom_place-button {
+  color: #171616;
+  height: 35px;
+  line-height: 30px;
+  background: wheat;
+  border: 2px solid #8d9471;
+  margin: 3px;
+  border-radius: 4px;
+  text-align: center;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+  .zoom_place-button:hover {
+    background: #f9f0df;
+  }
+
+.zoom_place {
+  width: 35px;
+  position: absolute;
+  z-index: 10;
+  color: #171616;
+  font: 14px Verdana, Arial, Helvetica, sans-serif;
+  background: wheat;
+  border-radius: 3px;
+}

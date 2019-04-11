@@ -3,12 +3,11 @@ import { Router, ActivatedRoute, Params, Data } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
-  selector: 'app-slot',
-  templateUrl: './slot.component.html'
+  selector: 'app-project',
+  templateUrl: './project.component.html'
 })
-export class SlotComponent implements OnInit {
-  public slot: Slot;
-  public projects: Project[];
+export class ProjectComponent implements OnInit {
+  public project: Project;
   private httpClient: HttpClient;
   private baseUrl : string;
 
@@ -18,25 +17,21 @@ export class SlotComponent implements OnInit {
 
     var id = this.route.snapshot.params['id'];
     if (id > 0) {
-      http.get<Slot>(this.baseUrl + 'api/Slot/Get/?id=' + id).subscribe(result => {
-        this.slot = result;
+      http.get<Project>(this.baseUrl + 'api/Project/Get/?id=' + id).subscribe(result => {
+        this.project = result;
       }, error => {
         alert('Có lỗi khi kết nối server!!!!!!');
       });
     } else {
-      this.slot = {
+      this.project = {
         id: 0,
-        projectId: 0,
         name: '',
-        direction: '',
-        longInMeter: 0,
-        widthInMeter: 0,
-        widthOfStreetInMeter: 0,
+        address: '',
+        progress: '',
         addedDate: new Date(),
         updatedDate: new Date()
       };
     }
-    this.getAllProjects();
   }
   ngOnInit() {
 
@@ -44,25 +39,17 @@ export class SlotComponent implements OnInit {
 
   }
 
-  getAllProjects() {
-    this.httpClient.get<Project[]>(this.baseUrl + 'api/Project/GetAll').subscribe(result => {
-      this.projects = result;
-    }, error => {
-      alert('Có lỗi khi kết nối server!!!!!!');
-    });
-  }
-
   moveToList() {
-    this.router.navigate(['./slot'])
+    this.router.navigate(['./project'])
   }
 
   save() {
-    this.httpClient.post<Slot>(this.baseUrl + 'api/Slot/save', this.slot)
+    this.httpClient.post<Project>(this.baseUrl + 'api/Project/save', this.project)
       .subscribe(data => {
         if (data == null) {
           alert('Có lỗi khi lưu dữ liệu!!!!!!');
         } else {
-          this.slot = data;
+          this.project = data;
           alert('Đã Lưu!!!');
         }
       }, error => {
@@ -71,17 +58,6 @@ export class SlotComponent implements OnInit {
   }
 }
 
-interface Slot {
-  id: number;
-  projectId: number;
-  name: string;
-  direction: string;
-  longInMeter: number;
-  widthInMeter: number;
-  widthOfStreetInMeter: number;
-  addedDate: Date;
-  updatedDate: Date;
-}
 interface Project {
   id: number;
   name: string;

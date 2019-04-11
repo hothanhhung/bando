@@ -15,11 +15,7 @@ namespace BanDo.Models
         public string Bounds { get; set; }
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-
-        public int? ProductId { get; set; }
-        [ForeignKey("ProductId")]
-        public Product Product { get; set; }
-
+        
         public int? SlotId { get; set; }
         [ForeignKey("SlotId")]
         public Slot Slot { get; set; }

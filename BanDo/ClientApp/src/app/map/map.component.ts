@@ -12,12 +12,12 @@ declare const google: any;
 export class MapComponent implements OnInit {
   public drawPies: DrawPie[];
   public slots: Slot[];
+  public projects: Project[];
   private httpClient: HttpClient;
   private baseUrl: string;
   private selectedDrawPie: DrawPie;
   private map: any;
   private selectedShape: any;
-  private selectedSlot: Slot;
 
   private defaultPolygonOptions = {
     strokeColor: '#FF0000',
@@ -74,7 +74,7 @@ export class MapComponent implements OnInit {
   ngOnInit() {
     //this.loadScript();
     this.initMapInCompoment();
-    this.loadSlot();
+    this.getAllProjects();
   }
 
   public initMapInCompoment(): any {
@@ -94,7 +94,7 @@ export class MapComponent implements OnInit {
         drawingManager.setDrawingMode(null);
         this.selectedShape = e.overlay;
         this.selectedShape.type = e.type;
-        this.selectedDrawPie = { id: 0, bounds: '', slotId:null, addedDate: new Date(), updatedDate: new Date()};
+        this.selectedDrawPie = { id: 0, slot: new Slot(), bounds: '', slotId: null, addedDate: new Date(), updatedDate: new Date() };
         this.selectedDrawPie.bounds = JSON.stringify(this.selectedShape.getPath().j);
 
       }
@@ -103,24 +103,35 @@ export class MapComponent implements OnInit {
     drawingManager.setMap(this.map);
   }
 
+  getAllProjects() {
+    this.httpClient.get<Project[]>(this.baseUrl + 'api/Project/GetAll').subscribe(result => {
+      this.projects = result;
+    }, error => {
+      alert('Có lỗi khi kết nối server!!!!!!');
+    });
+  }
+
   private findSlot(slotId: number) {
-    if (slotId != null && slotId!=0) {
+    if (this.slots && slotId != null && slotId!=0) {
       for (let slot of this.slots) {
         if (slot.id == slotId) {
-          this.selectedSlot = slot;
+          this.selectedDrawPie.slot = slot;
           return;
         }
       }
     }
-    this.selectedSlot = null;
+   // this.selectedDrawPie.slot = new Slot();
   }
 
-  private loadSlot() {
-    this.httpClient.get<Slot[]>(this.baseUrl + 'api/Slot/GetAll').subscribe(result => {
-      this.slots = result;
-    }, error => {
-      alert('Có lỗi khi kết nối server!!!!!!');
-    });
+  public loadSlot(projectId: number) {
+    if (projectId) {
+      this.httpClient.get<Slot[]>(this.baseUrl + 'api/Slot/GetAllByProject/?projectId=' + projectId).subscribe(result => {
+        this.slots = result;
+        this.findSlot(this.selectedDrawPie.slotId);
+      }, error => {
+        alert('Có lỗi khi kết nối server!!!!!!');
+      });
+    }
   }
 
   loadMap() {
@@ -157,7 +168,13 @@ export class MapComponent implements OnInit {
     this.selectedShape = shape;
     this.selectedDrawPie = value;
     this.selectedShape.setOptions(this.selectedPolygonOptions);
-    this.findSlot(this.selectedDrawPie.slotId);
+    if (this.selectedDrawPie) {
+      if (this.selectedDrawPie.slot) {
+        this.loadSlot(this.selectedDrawPie.slot.productId);
+      } else {
+        this.selectedDrawPie.slot = new Slot();
+      }
+    }
   }
   
   public cancel() {
@@ -189,6 +206,7 @@ export class MapComponent implements OnInit {
             alert('Có lỗi khi lưu dữ liệu!!!!!!');
           } else {
             this.selectedDrawPie = data;
+            this.findSlot(this.selectedDrawPie.slotId);
             this.addShapeToMap(this.selectedDrawPie, true);
             alert('Đã Lưu!!!');
           }
@@ -203,17 +221,27 @@ interface DrawPie {
   id: number;
   bounds: string;
   slotId: number;
+  slot: Slot;
   addedDate: Date;
   updatedDate: Date;
 }
 
-interface Slot {
+class Slot {
   id: number;
+  productId: number;
   name: string;
   direction: string;
   longInMeter: number;
   widthInMeter: number;
   WidthOfStreetInMeter: number;
+  addedDate: Date;
+  updatedDate: Date;
+}
+interface Project {
+  id: number;
+  name: string;
+  address: string;
+  progress: string;
   addedDate: Date;
   updatedDate: Date;
 }

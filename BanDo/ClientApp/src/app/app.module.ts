@@ -11,6 +11,8 @@ import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerComponent } from './customer/customer.component';
+import { ProjectListComponent } from './project-list/project-list.component';
+import { ProjectComponent } from './project/project.component';
 import { LoginComponent } from './login/login.component';
 import { MapComponent } from './map/map.component';
 import { MapImageComponent } from './map-image/map-image.component';
@@ -26,6 +28,8 @@ import { SlotComponent } from './slot/slot.component';
     FetchDataComponent,
     CustomerListComponent,
     CustomerComponent,
+    ProjectListComponent,
+    ProjectComponent,
     LoginComponent,
     MapComponent,
     MapImageComponent,
@@ -42,6 +46,8 @@ import { SlotComponent } from './slot/slot.component';
       { path: 'fetch-data', component: FetchDataComponent },
       { path: 'customer/:id', component: CustomerComponent },
       { path: 'customer', component: CustomerListComponent },
+      { path: 'project/:id', component: ProjectComponent },
+      { path: 'project', component: ProjectListComponent },
       { path: 'login', component: LoginComponent },
       { path: 'map', component: MapComponent },
       { path: 'map-image', component: MapImageComponent },

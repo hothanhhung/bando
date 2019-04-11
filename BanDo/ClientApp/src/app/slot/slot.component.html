@@ -13,6 +13,13 @@
     <input type="text" class="form-control" id="name" [(ngModel)]="slot.name">
   </div>
   <div class="form-group">
+    <label>Dự Án:</label>
+    <select class="form-control" id="direction" [(ngModel)]="slot.productId">
+      <option value=""></option>
+      <option *ngFor="let project of projects" value="{{project.id}}">{{project.name}}</option>
+    </select>
+  </div>
+  <div class="form-group">
     <label for="usr">Hướng:</label>
     <select class="form-control" id="direction" [(ngModel)]="slot.direction">
       <option value="Bắc">Bắc</option>
@@ -35,7 +42,7 @@
   </div>
   <div class="form-group">
     <label for="usr">Đường:</label>
-    <input type="text" class="form-control" id="WidthOfStreetInMeter" [(ngModel)]="slot.WidthOfStreetInMeter">
+    <input type="text" class="form-control" id="WidthOfStreetInMeter" [(ngModel)]="slot.widthOfStreetInMeter">
   </div>
   <button type="button" class="btn btn-success" (click)='save()'>Lưu</button>
 </div>

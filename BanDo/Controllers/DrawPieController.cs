@@ -26,7 +26,7 @@ namespace BanDo.Controllers
         [HttpGet("[action]")]
         public IEnumerable<DrawPie> GetAll()
         {
-            var data = _context.DrawPies.ToList();
+            var data = _context.DrawPies.Include(p=>p.Slot).ToList();
             return data;
 
         }
@@ -34,7 +34,7 @@ namespace BanDo.Controllers
         [HttpGet("[action]")]
         public DrawPie Get(int id)
         {
-            var data = _context.DrawPies.Where(p => p.Id == id).FirstOrDefault();
+            var data = _context.DrawPies.Include(p => p.Slot).Where(p => p.Id == id).FirstOrDefault();
             return data;
         }
 
@@ -51,6 +51,9 @@ namespace BanDo.Controllers
         {
             try
             {
+                var slot = drawPie.Slot;
+                drawPie.Slot = null;
+
                 var data = _context.DrawPies.AsNoTracking().Where(p => p.Id == drawPie.Id).FirstOrDefault();
                 if (data == null)
                 {
@@ -66,6 +69,7 @@ namespace BanDo.Controllers
                     drawPie = rs.Entity;
                 }
                 await _context.SaveChangesAsync();
+                drawPie.Slot = slot;
                 return drawPie;
             }catch(Exception ex)
             {

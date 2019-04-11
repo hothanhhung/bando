@@ -1,0 +1,35 @@
+<h1>Danh Sách Các Dự Án</h1>
+
+<p>
+  <a (click)="addNew()">
+    <span class='glyphicon glyphicon-education'></span> Thêm mới
+  </a>
+</p>
+
+<p *ngIf="!projects"><em>Loading...</em></p>
+
+<table class='table' *ngIf="projects">
+  <thead>
+    <tr>
+      <th>Tên</th>
+      <th>Địa Chỉ</th>
+      <th>Tiến Độ</th>
+      <th>Ngày Cập Nhật</th>
+      <th>Ngày Thêm</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let project of projects">
+      <td>{{ project.name }}</td>
+      <td>{{ project.address }}</td>
+      <td>{{ project.progress }}</td>
+      <td>{{ project.updatedDate }}</td>
+      <td>{{ project.addedDate }}</td>
+      <td>
+        <a (click)="openDetail(project.id)">Chỉnh Sửa</a>
+        <a (click)="delete(project)">Xóa</a>
+      </td>
+    </tr>
+  </tbody>
+</table>

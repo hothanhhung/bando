@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BanDo.Models
 {
@@ -14,5 +15,9 @@ namespace BanDo.Models
         public float WidthOfStreetInMeter { get; set; }
         public DateTime AddedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
+
+        public int? ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
     }
 }
