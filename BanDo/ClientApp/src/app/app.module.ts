@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -18,6 +18,7 @@ import { MapComponent } from './map/map.component';
 import { MapImageComponent } from './map-image/map-image.component';
 import { SlotListComponent } from './slot-list/slot-list.component';
 import { SlotComponent } from './slot/slot.component';
+import { HttpErrorInterceptor } from './HttpError.Interceptor';
 
 @NgModule({
   declarations: [
@@ -55,7 +56,12 @@ import { SlotComponent } from './slot/slot.component';
       { path: 'slot', component: SlotListComponent },
     ])
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

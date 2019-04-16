@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace BanDo
 {
@@ -31,11 +32,19 @@ namespace BanDo
                 configuration.RootPath = "ClientApp/dist";
             });
             services.AddDbContext<Data.QuanLyContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+            //{
+            //    option.AccessDeniedPath = "/Authenticate/login";
+            //}
+            //    );
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
             {
-                option.AccessDeniedPath = "/Authenticate/login";
-            }
-                );
+                option.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

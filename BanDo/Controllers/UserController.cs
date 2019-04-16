@@ -23,6 +23,7 @@ namespace BanDo.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public IEnumerable<User> GetAll()
         {
@@ -31,6 +32,7 @@ namespace BanDo.Controllers
 
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public User Get(string username)
         {
@@ -38,6 +40,7 @@ namespace BanDo.Controllers
             return data;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public void Delete(string username)
         {
@@ -45,6 +48,7 @@ namespace BanDo.Controllers
             _context.Users.Remove(data);
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost("[action]")]
         public async Task<User> Save(User user)
         {

@@ -81,5 +81,17 @@ namespace BanDo.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
+        [AllowAnonymous]
+        [HttpGet("[action]")]
+        public User IsLogin()
+        {
+            var userClaim = User.Claims.Where(p => p.Type == ClaimTypes.Name).FirstOrDefault();
+            if (userClaim != null)
+            {
+                var data = _context.Users.Where(p => p.Username == userClaim.Value).FirstOrDefault();
+                return data;
+            }
+            return null;
+        }
     }
 }

@@ -23,6 +23,7 @@ namespace BanDo.Controllers
             _context = context;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public IEnumerable<DrawPieImage> GetAll()
         {
@@ -31,6 +32,7 @@ namespace BanDo.Controllers
 
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public DrawPieImage Get(int id)
         {
@@ -38,6 +40,7 @@ namespace BanDo.Controllers
             return data;
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpGet("[action]")]
         public void Delete(int id)
         {
@@ -46,6 +49,7 @@ namespace BanDo.Controllers
             _context.SaveChanges();
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPost("[action]")]
         public async Task<DrawPieImage> Save(DrawPieImage drawPie)
         {

@@ -1,4 +1,4 @@
-import { Component, Inject} from '@angular/core';
+import { Component, Inject, HostBinding, Input} from '@angular/core';
 import { Router, ActivatedRoute, Params, Data } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 
@@ -12,19 +12,25 @@ export class NavMenuComponent {
   private http: HttpClient;
   private baseUrl: string;
 
-  currentUser;
+  @HostBinding('class.current-user') @Input()
+  private currentUser;
   constructor(http: HttpClient, private route: ActivatedRoute, private router: Router, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
     this.baseUrl = '/';
-    var str = window.sessionStorage.getItem("currentUser");
-    if (str) {
-      this.currentUser = JSON.parse(str);
-    }
+    //var str = window.sessionStorage.getItem("currentUser");
+    //if (str) {
+    //  this.currentUser = JSON.parse(str);
+    //}
   }
 
   logout() {
-    window.sessionStorage.removeItem("currentUser");
-    this.router.navigate(['./login']);
+    this.http.get<Customer[]>(this.baseUrl + 'api/Authenticate/Logout').subscribe(result => {
+      window.sessionStorage.removeItem("currentUser");
+      this.currentUser = null;
+      this.router.navigate(['./login']);
+    }, error => {
+      alert('Có lỗi khi kết nối server!!!!!!');
+    });
   }
 
   collapse() {

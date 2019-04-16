@@ -16,6 +16,8 @@ export class SlotComponent implements OnInit {
     this.httpClient = http;
     this.baseUrl = '/';
 
+    this.getAllProjects();
+
     var id = this.route.snapshot.params['id'];
     if (id > 0) {
       http.get<Slot>(this.baseUrl + 'api/Slot/Get/?id=' + id).subscribe(result => {
@@ -36,7 +38,6 @@ export class SlotComponent implements OnInit {
         updatedDate: new Date()
       };
     }
-    this.getAllProjects();
   }
   ngOnInit() {
 
